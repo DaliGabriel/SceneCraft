@@ -114,7 +114,7 @@ export default function Home() {
                 htmlFor="text"
                 className="block text-sm font-medium text-gray-700 mb-2"
               >
-                Enter your dialogue text
+                Ingresa tu texto
               </label>
               <textarea
                 id="text"
@@ -122,7 +122,7 @@ export default function Home() {
                 onChange={(e) => setText(e.target.value)}
                 className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
                 rows={6}
-                placeholder="Enter your text here..."
+                placeholder="Escribe tu texto aquí..."
                 required
               />
             </div>
@@ -131,7 +131,7 @@ export default function Home() {
               disabled={loading}
               className="w-full bg-indigo-600 text-white py-2 px-4 rounded-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 disabled:opacity-50"
             >
-              {loading ? "Processing..." : "Generate Images"}
+              {loading ? "Procesando..." : "Generar Imágenes"}
             </button>
           </form>
 
@@ -148,7 +148,9 @@ export default function Home() {
                 disabled={downloading}
                 className="w-full bg-green-600 text-white py-2 px-4 rounded-md hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 disabled:opacity-50"
               >
-                {downloading ? "Downloading..." : "Download All Images"}
+                {downloading
+                  ? "Descargando..."
+                  : "Descargar Todas las Imágenes"}
               </button>
             </div>
           )}
@@ -161,7 +163,7 @@ export default function Home() {
                   <div className="relative aspect-square w-full">
                     <Image
                       src={result.imageUrl}
-                      alt={`Generated image for paragraph ${index + 1}`}
+                      alt={`Imagen generada para el párrafo ${index + 1}`}
                       fill
                       className="object-cover rounded-lg"
                     />
