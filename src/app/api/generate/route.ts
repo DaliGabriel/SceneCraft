@@ -14,32 +14,88 @@ export async function POST(request: Request) {
   try {
     const { text } = await request.json();
 
-    // Split text into paragraphs using OpenAI
+    // Part the text manually into paragraphs
+    const paragraphs = text
+      .split(/\n{2,}/) // Split by double newlines
+      .map((p: string) => p.trim())
+      .filter((p: string) => p.length > 0);
+
+    if (paragraphs.length === 0) {
+      throw new Error("No valid paragraphs found in input text");
+    }
+
+    // Now ask OpenAI to generate visual prompts for each paragraph
     const completion = await openai.chat.completions.create({
+      model: "gpt-4o-mini", // Mejor para formato JSON
+      response_format: { type: "json_object" },
       messages: [
         {
           role: "system",
-          content:
-            "You are a helpful assistant that splits text into meaningful paragraphs. Return the paragraphs as a JSON array of strings.",
+          content: `
+You are a visual storytelling expert.
+For each paragraph provided, generate a rich, vivid, cinematic image prompt.
+
+Instructions for each prompt:
+- Describe environment, lighting, emotions, and key actions
+- Be vivid but concise
+- Present tense
+- Include camera angle or shot type if useful
+- No extra commentary, only the array output
+
+Return JSON array of objects like:
+[
+  {
+    "original": "Original paragraph here",
+    "prompt": "Generated cinematic prompt here"
+  }
+]
+`,
         },
         {
           role: "user",
-          content: text,
+          content: JSON.stringify(paragraphs),
         },
       ],
-      model: "gpt-3.5-turbo",
-      response_format: { type: "json_object" },
     });
 
-    const paragraphs = JSON.parse(
-      completion.choices[0].message.content || '{"paragraphs": []}'
-    ).paragraphs;
+    const responseContent = completion.choices[0].message.content;
+    console.log(responseContent);
 
-    // Generate images for each paragraph
-    const imagePromises = paragraphs.map(async (paragraph: string) => {
+    if (!responseContent) {
+      throw new Error("No content received from OpenAI");
+    }
+
+    let scenes: Array<{ original: string; prompt: string }>;
+    try {
+      const parsed = JSON.parse(responseContent);
+      // Handle the specific GPT response format with result array
+      if (parsed.result && Array.isArray(parsed.result)) {
+        scenes = parsed.result.map(
+          (item: { original: string; prompt: string }) => ({
+            original: item.original,
+            prompt: item.prompt,
+          })
+        );
+      } else {
+        throw new Error(
+          "Invalid response format: missing or invalid result array"
+        );
+      }
+    } catch (error) {
+      console.error("Parse error:", error);
+      console.error("Response content:", responseContent);
+      throw new Error("Failed to parse OpenAI response");
+    }
+
+    if (!Array.isArray(scenes) || scenes.length === 0) {
+      throw new Error("No valid scenes found in OpenAI response");
+    }
+
+    // Generate images for each scene
+    const imagePromises = scenes.map(async (scene) => {
       const output = await replicate.run("black-forest-labs/flux-schnell", {
         input: {
-          prompt: paragraph,
+          prompt: scene.prompt,
           go_fast: true,
           megapixels: "1",
           num_outputs: 1,
@@ -50,7 +106,7 @@ export async function POST(request: Request) {
         },
       });
       return {
-        paragraph,
+        paragraph: scene.original,
         imageUrl: (output as { url: () => string }[])[0].url(),
       };
     });
