@@ -94,14 +94,14 @@ export default function Home() {
             automatically.&rdquo;
           </p>
           <p className="text-lg text-gray-600 mb-12">
-            Write your text, generate images for each scene, save hours of
-            creative work.
+            Write a text, generate images for each scene, save hours of creative
+            work.
           </p>
           <button
             onClick={() => setShowGenerator(true)}
             className="bg-indigo-600 text-white px-8 py-4 rounded-lg text-lg font-semibold hover:bg-indigo-700 transition-colors"
           >
-            Generate Images Now
+            Generate images now
           </button>
         </div>
       ) : (
@@ -112,7 +112,7 @@ export default function Home() {
               onClick={() => setShowGenerator(false)}
               className="text-indigo-600 hover:text-indigo-800"
             >
-              ← Back to Home
+              ← Back to home page
             </button>
             <Link href="/" className="text-indigo-600 hover:text-indigo-800">
               Español

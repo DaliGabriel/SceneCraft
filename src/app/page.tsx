@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import Image from "next/image";
+import Link from "next/link";
 
 export default function Home() {
   const [showGenerator, setShowGenerator] = useState(false);
@@ -82,6 +83,11 @@ export default function Home() {
       {!showGenerator ? (
         // Landing Page
         <div className="max-w-4xl mx-auto px-4 py-16 text-center">
+          <div className="flex justify-end mb-4">
+            <Link href="/en" className="text-indigo-600 hover:text-indigo-800">
+              English
+            </Link>
+          </div>
           <h1 className="text-5xl font-bold text-gray-900 mb-6">SceneCraft</h1>
           <p className="text-xl text-gray-700 mb-8">
             &ldquo;Convierte tu historia o diálogo en imágenes
@@ -101,12 +107,17 @@ export default function Home() {
       ) : (
         // Generator Page
         <div className="max-w-3xl mx-auto py-8 px-4 sm:px-6 lg:px-8">
-          <button
-            onClick={() => setShowGenerator(false)}
-            className="mb-8 text-indigo-600 hover:text-indigo-800"
-          >
-            ← Volver a la página principal
-          </button>
+          <div className="flex justify-between items-center mb-8">
+            <button
+              onClick={() => setShowGenerator(false)}
+              className="text-indigo-600 hover:text-indigo-800"
+            >
+              ← Volver a la página principal
+            </button>
+            <Link href="/en" className="text-indigo-600 hover:text-indigo-800">
+              English
+            </Link>
+          </div>
 
           <form onSubmit={handleSubmit} className="mb-8">
             <div className="mb-4">
