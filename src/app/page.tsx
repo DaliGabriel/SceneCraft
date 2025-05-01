@@ -79,27 +79,32 @@ export default function Home() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-100">
+    <div className="min-h-screen bg-gray-100 dark:bg-gray-900">
       {!showGenerator ? (
         // Landing Page
         <div className="max-w-4xl mx-auto px-4 py-16 text-center">
           <div className="flex justify-end mb-4">
-            <Link href="/en" className="text-indigo-600 hover:text-indigo-800">
+            <Link
+              href="/en"
+              className="text-indigo-600 hover:text-indigo-800 dark:text-indigo-400 dark:hover:text-indigo-300"
+            >
               English
             </Link>
           </div>
-          <h1 className="text-5xl font-bold text-gray-900 mb-6">SceneCraft</h1>
-          <p className="text-xl text-gray-700 mb-8">
+          <h1 className="text-5xl font-bold text-gray-900 dark:text-white mb-6">
+            SceneCraft
+          </h1>
+          <p className="text-xl text-gray-700 dark:text-gray-300 mb-8">
             &ldquo;Convierte tu historia o diálogo en imágenes
             automáticamente.&rdquo;
           </p>
-          <p className="text-lg text-gray-600 mb-12">
+          <p className="text-lg text-gray-600 dark:text-gray-400 mb-12">
             Escribe un texto, genera imágenes para cada escena, ahorra horas de
             trabajo creativo.
           </p>
           <button
             onClick={() => setShowGenerator(true)}
-            className="bg-indigo-600 text-white px-8 py-4 rounded-lg text-lg font-semibold hover:bg-indigo-700 transition-colors"
+            className="bg-indigo-600 text-white px-8 py-4 rounded-lg text-lg font-semibold hover:bg-indigo-700 dark:bg-indigo-500 dark:hover:bg-indigo-600 transition-colors"
           >
             Generar imágenes ahora
           </button>
@@ -110,11 +115,14 @@ export default function Home() {
           <div className="flex justify-between items-center mb-8">
             <button
               onClick={() => setShowGenerator(false)}
-              className="text-indigo-600 hover:text-indigo-800"
+              className="text-indigo-600 hover:text-indigo-800 dark:text-indigo-400 dark:hover:text-indigo-300"
             >
               ← Volver a la página principal
             </button>
-            <Link href="/en" className="text-indigo-600 hover:text-indigo-800">
+            <Link
+              href="/en"
+              className="text-indigo-600 hover:text-indigo-800 dark:text-indigo-400 dark:hover:text-indigo-300"
+            >
               English
             </Link>
           </div>
@@ -123,7 +131,7 @@ export default function Home() {
             <div className="mb-4">
               <label
                 htmlFor="text"
-                className="block text-sm font-medium text-gray-700 mb-2"
+                className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2"
               >
                 Ingresa tu texto
               </label>
@@ -131,7 +139,7 @@ export default function Home() {
                 id="text"
                 value={text}
                 onChange={(e) => setText(e.target.value)}
-                className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
+                className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 dark:bg-gray-800 dark:text-white"
                 rows={6}
                 placeholder="Escribe tu texto aquí..."
                 required
@@ -140,14 +148,14 @@ export default function Home() {
             <button
               type="submit"
               disabled={loading}
-              className="w-full bg-indigo-600 text-white py-2 px-4 rounded-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 disabled:opacity-50"
+              className="w-full bg-indigo-600 text-white py-2 px-4 rounded-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 disabled:opacity-50 dark:bg-indigo-500 dark:hover:bg-indigo-600"
             >
               {loading ? "Procesando..." : "Generar Imágenes"}
             </button>
           </form>
 
           {error && (
-            <div className="mb-4 p-4 bg-red-100 text-red-700 rounded-md">
+            <div className="mb-4 p-4 bg-red-100 text-red-700 rounded-md dark:bg-red-900 dark:text-red-200">
               {error}
             </div>
           )}
@@ -157,7 +165,7 @@ export default function Home() {
               <button
                 onClick={handleDownload}
                 disabled={downloading}
-                className="w-full bg-green-600 text-white py-2 px-4 rounded-md hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 disabled:opacity-50"
+                className="w-full bg-green-600 text-white py-2 px-4 rounded-md hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 disabled:opacity-50 dark:bg-green-500 dark:hover:bg-green-600"
               >
                 {downloading
                   ? "Descargando..."
@@ -168,8 +176,13 @@ export default function Home() {
 
           <div className="space-y-8">
             {results.map((result, index) => (
-              <div key={index} className="bg-white p-6 rounded-lg shadow">
-                <p className="mb-4 text-gray-700">{result.paragraph}</p>
+              <div
+                key={index}
+                className="bg-white dark:bg-gray-800 p-6 rounded-lg shadow"
+              >
+                <p className="mb-4 text-gray-700 dark:text-gray-300">
+                  {result.paragraph}
+                </p>
                 {result.imageUrl && (
                   <div className="relative aspect-square w-full">
                     <Image
