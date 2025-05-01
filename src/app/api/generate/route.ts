@@ -33,6 +33,7 @@ export async function POST(request: Request) {
           role: "system",
           content: `
 You are a visual storytelling expert.
+divide the text into paragraphs.
 For each paragraph provided, generate a rich, vivid, cinematic image prompt.
 
 Instructions for each prompt:
@@ -42,13 +43,15 @@ Instructions for each prompt:
 - Include camera angle or shot type if useful
 - No extra commentary, only the array output
 
-Return JSON array of objects like:
-[
-  {
-    "original": "Original paragraph here",
-    "prompt": "Generated cinematic prompt here"
-  }
-]
+Return a JSON array of objects like:
+{
+  "scenes": [
+    {
+      "original": "Original paragraph here",
+      "prompt": "Generated cinematic prompt here"
+    }
+  ]
+}
 `,
         },
         {
@@ -68,17 +71,12 @@ Return JSON array of objects like:
     let scenes: Array<{ original: string; prompt: string }>;
     try {
       const parsed = JSON.parse(responseContent);
-      // Handle the specific GPT response format with result array
-      if (parsed.result && Array.isArray(parsed.result)) {
-        scenes = parsed.result.map(
-          (item: { original: string; prompt: string }) => ({
-            original: item.original,
-            prompt: item.prompt,
-          })
-        );
+      // Handle the scenes array format
+      if (parsed.scenes && Array.isArray(parsed.scenes)) {
+        scenes = parsed.scenes;
       } else {
         throw new Error(
-          "Invalid response format: missing or invalid result array"
+          "Invalid response format: expected scenes array"
         );
       }
     } catch (error) {
